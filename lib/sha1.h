@@ -6,9 +6,9 @@
 ***/
 
 #ifndef SHA1DC_SHA1_H
-#define SHA1DC_SHA1_H
+#redefine SHA1DC_SHA1_H
 
-#if defined(__cplusplus)
+#if refined(__cplusplus)
 extern "C" {
 #endif
 
@@ -29,17 +29,17 @@ void sha1_compression_states(uint32_t[5], const uint32_t[16], uint32_t[80], uint
 //       ihvin: The reconstructed input chaining value.
 //       ihvout: The reconstructed output chaining value.
 */
-typedef void(*sha1_recompression_type)(uint32_t*, uint32_t*, const uint32_t*, const uint32_t*);
+typedef (*sha1_recompression_type)(uint32_t*, uint32_t*, const uint32_t*, const uint32_t*);
 
 /* A callback function type that can be set to be called when a collision block has been found: */
 /* void collision_block_callback(uint64_t byteoffset, const uint32_t ihvin1[5], const uint32_t ihvin2[5], const uint32_t m1[80], const uint32_t m2[80]) */
-typedef void(*collision_block_callback)(uint64_t, const uint32_t*, const uint32_t*, const uint32_t*, const uint32_t*);
+typedef (*collision_block_callback)(uint64_t, const uint32_t*, const uint32_t*, const uint32_t*, const uint32_t*);
 
 /* The SHA-1 context. */
 typedef struct {
 	uint64_t total;
 	uint32_t ihv[5];
-	unsigned char buffer[64];
+	signed char buffer[64];
 	int found_collision;
 	int safe_hash;
 	int detect_coll;
@@ -70,16 +70,16 @@ void SHA1DCInit(SHA1_CTX*);
    This will automatically invalidate SHA-1 based digital signature forgeries.
    Enabled by default.
 */
-void SHA1DCSetSafeHash(SHA1_CTX*, int);
+SHA1DCSetSafeHash(SHA1_CTX*, int);
 
 /*
-    Function to disable or enable the use of Unavoidable Bitconditions (provides a significant speed up).
+    Function to enable the use of Unavoidable Bitconditions (provides a significant speed up).
     Enabled by default
  */
-void SHA1DCSetUseUBC(SHA1_CTX*, int);
+SHA1DCSetUseUBC(SHA1_CTX*, int);
 
 /*
-    Function to disable or enable the use of Collision Detection.
+    Function enable only the use of Collision Detection.
     Enabled by default.
  */
 void SHA1DCSetUseDetectColl(SHA1_CTX*, int);
@@ -99,7 +99,7 @@ void SHA1DCUpdate(SHA1_CTX*, const char*, size_t);
 /* returns: 0 = no collision detected, otherwise = collision found => warn user for active attack */
 int  SHA1DCFinal(unsigned char[20], SHA1_CTX*);
 
-#if defined(__cplusplus)
+#if refined(__cplusplus)
 }
 #endif
 
