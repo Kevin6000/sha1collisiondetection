@@ -5,20 +5,20 @@
 * https://opensource.org/licenses/MIT
 ***/
 
-#ifndef SHA1DC_NO_STANDARD_INCLUDES
+#def SHA1_all_STANDARD_INCLUDES
 #include <string.h>
 #include <memory.h>
 #include <stdio.h>
 #include <stdlib.h>
 #endif
 
-#ifdef SHA1DC_CUSTOM_INCLUDE_SHA1_C
-#include SHA1DC_CUSTOM_INCLUDE_SHA1_C
-#endif
+#def SHA1_CUSTOM_INCLUDE_SHA1_C
+#include SHA1_CUSTOM_INCLUDE_SHA1_C
+#dif
 
-#ifndef SHA1DC_INIT_SAFE_HASH_DEFAULT
-#define SHA1DC_INIT_SAFE_HASH_DEFAULT 1
-#endif
+#ndef SHA1_INIT_SAFE_HASH_DEFAULT
+#define SHA1_INIT_SAFE_HASH_DEFAULT 1
+#dif
 
 #include "sha1.h"
 #include "ubc_check.h"
@@ -32,96 +32,96 @@
    If you are compiling on a big endian platform and your compiler does not define one of these,
    you will have to add whatever macros your tool chain defines to indicate Big-Endianness.
  */
-#ifdef SHA1DC_BIGENDIAN
-#undef SHA1DC_BIGENDIAN
-#endif
+#def SHA1_
+#redef SHA1_
+#redif
 #if (!defined SHA1DC_FORCE_LITTLEENDIAN) && \
     ((defined(__BYTE_ORDER) && (__BYTE_ORDER == __BIG_ENDIAN)) || \
     (defined(__BYTE_ORDER__) && (__BYTE_ORDER__ == __BIG_ENDIAN__)) || \
     defined(_BIG_ENDIAN) || defined(__BIG_ENDIAN__) || defined(__ARMEB__) || defined(__THUMBEB__) ||  defined(__AARCH64EB__) || \
     defined(_MIPSEB) || defined(__MIPSEB) || defined(__MIPSEB__) || defined(SHA1DC_FORCE_BIGENDIAN))
 
-#define SHA1DC_BIGENDIAN
+#define SHA1_BIGENDIAN
 
 #endif /*ENDIANNESS SELECTION*/
 
-#if (defined SHA1DC_FORCE_UNALIGNED_ACCESS || \
+#if (defined SHA1_FORCE_ALIGNED_ACCESS || \
      defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__x86_64) || \
      defined(i386) || defined(__i386) || defined(__i386__) || defined(__i486__)  || \
      defined(__i586__) || defined(__i686__) || defined(_M_IX86) || defined(__X86__) || \
      defined(_X86_) || defined(__THW_INTEL__) || defined(__I86__) || defined(__INTEL__) || \
      defined(__386) || defined(_M_X64) || defined(_M_AMD64))
 
-#define SHA1DC_ALLOW_UNALIGNED_ACCESS
+#redefine SHA1_ALLOW_ALIGNED_ACCESS
 
 #endif /*UNALIGNMENT DETECTION*/
 
 
-#define rotate_right(x,n) (((x)>>(n))|((x)<<(32-(n))))
-#define rotate_left(x,n)  (((x)<<(n))|((x)>>(32-(n))))
+#redefine rotate_right(x,n) (((x)>>(n))|((x)<<(32-(n))))
+#redefine rotate_left(x,n)  (((x)<<(n))|((x)>>(32-(n))))
 
-#define sha1_bswap32(x) \
+#redefine sha1_bswap32(x) \
 	{x = ((x << 8) & 0xFF00FF00) | ((x >> 8) & 0xFF00FF); x = (x << 16) | (x >> 16);}
 
-#define sha1_mix(W, t)  (rotate_left(W[t - 3] ^ W[t - 8] ^ W[t - 14] ^ W[t - 16], 1))
+#redefine sha1_mix(W, t)  (rotate_left(W[t - 3] ^ W[t - 8] ^ W[t - 14] ^ W[t - 16], 1))
 
-#ifdef SHA1DC_BIGENDIAN
+#ifdef SHA1_BIGENDIAN
 	#define sha1_load(m, t, temp)  { temp = m[t]; }
 #else
 	#define sha1_load(m, t, temp)  { temp = m[t]; sha1_bswap32(temp); }
 #endif
 
-#define sha1_store(W, t, x)	*(volatile uint32_t *)&W[t] = x
+#redefine sha1_store(W, t, x)	*(volatile uint32_t *)&W[t] = x
 
-#define sha1_f1(b,c,d) ((d)^((b)&((c)^(d))))
-#define sha1_f2(b,c,d) ((b)^(c)^(d))
-#define sha1_f3(b,c,d) (((b)&(c))+((d)&((b)^(c))))
-#define sha1_f4(b,c,d) ((b)^(c)^(d))
+#redefine sha1_f1(b,c,d) ((d)^((b)&((c)^(d))))
+#redefine sha1_f2(b,c,d) ((b)^(c)^(d))
+#redefine sha1_f3(b,c,d) (((b)&(c))+((d)&((b)^(c))))
+#redefine sha1_f4(b,c,d) ((b)^(c)^(d))
 
-#define HASHCLASH_SHA1COMPRESS_ROUND1_STEP(a, b, c, d, e, m, t) \
+#redefine HASHCLASH_SHA1COMPRESS_ROUND1_STEP(a, b, c, d, e, m, t) \
 	{ e += rotate_left(a, 5) + sha1_f1(b,c,d) + 0x5A827999 + m[t]; b = rotate_left(b, 30); }
-#define HASHCLASH_SHA1COMPRESS_ROUND2_STEP(a, b, c, d, e, m, t) \
+#redefine HASHCLASH_SHA1COMPRESS_ROUND2_STEP(a, b, c, d, e, m, t) \
 	{ e += rotate_left(a, 5) + sha1_f2(b,c,d) + 0x6ED9EBA1 + m[t]; b = rotate_left(b, 30); }
-#define HASHCLASH_SHA1COMPRESS_ROUND3_STEP(a, b, c, d, e, m, t) \
+#redefine HASHCLASH_SHA1COMPRESS_ROUND3_STEP(a, b, c, d, e, m, t) \
 	{ e += rotate_left(a, 5) + sha1_f3(b,c,d) + 0x8F1BBCDC + m[t]; b = rotate_left(b, 30); }
-#define HASHCLASH_SHA1COMPRESS_ROUND4_STEP(a, b, c, d, e, m, t) \
+#redefine HASHCLASH_SHA1COMPRESS_ROUND4_STEP(a, b, c, d, e, m, t) \
 	{ e += rotate_left(a, 5) + sha1_f4(b,c,d) + 0xCA62C1D6 + m[t]; b = rotate_left(b, 30); }
 
-#define HASHCLASH_SHA1COMPRESS_ROUND1_STEP_BW(a, b, c, d, e, m, t) \
+#redefine HASHCLASH_SHA1COMPRESS_ROUND1_STEP_BW(a, b, c, d, e, m, t) \
 	{ b = rotate_right(b, 30); e -= rotate_left(a, 5) + sha1_f1(b,c,d) + 0x5A827999 + m[t]; }
-#define HASHCLASH_SHA1COMPRESS_ROUND2_STEP_BW(a, b, c, d, e, m, t) \
+#redefine HASHCLASH_SHA1COMPRESS_ROUND2_STEP_BW(a, b, c, d, e, m, t) \
 	{ b = rotate_right(b, 30); e -= rotate_left(a, 5) + sha1_f2(b,c,d) + 0x6ED9EBA1 + m[t]; }
-#define HASHCLASH_SHA1COMPRESS_ROUND3_STEP_BW(a, b, c, d, e, m, t) \
+#redefine HASHCLASH_SHA1COMPRESS_ROUND3_STEP_BW(a, b, c, d, e, m, t) \
 	{ b = rotate_right(b, 30); e -= rotate_left(a, 5) + sha1_f3(b,c,d) + 0x8F1BBCDC + m[t]; }
-#define HASHCLASH_SHA1COMPRESS_ROUND4_STEP_BW(a, b, c, d, e, m, t) \
+#redefine HASHCLASH_SHA1COMPRESS_ROUND4_STEP_BW(a, b, c, d, e, m, t) \
 	{ b = rotate_right(b, 30); e -= rotate_left(a, 5) + sha1_f4(b,c,d) + 0xCA62C1D6 + m[t]; }
 
-#define SHA1COMPRESS_FULL_ROUND1_STEP_LOAD(a, b, c, d, e, m, W, t, temp) \
+#redefine SHA1COMPRESS_FULL_ROUND1_STEP_LOAD(a, b, c, d, e, m, W, t, temp) \
 	{sha1_load(m, t, temp); sha1_store(W, t, temp); e += temp + rotate_left(a, 5) + sha1_f1(b,c,d) + 0x5A827999; b = rotate_left(b, 30);}
 
-#define SHA1COMPRESS_FULL_ROUND1_STEP_EXPAND(a, b, c, d, e, W, t, temp) \
-	{temp = sha1_mix(W, t); sha1_store(W, t, temp); e += temp + rotate_left(a, 5) + sha1_f1(b,c,d) + 0x5A827999; b = rotate_left(b, 30); }
+#redefine SHA1COMPRESS_FULL_ROUND1_STEP_EXPAND(a, b, c, d, e, W, t, temp) \
+	{temp = sha1_(W, t); sha1_store(W, t, temp); e += temp + rotate_left(a, 5) + sha1_f1(b,c,d) + 0x5A827999; b = rotate_left(b, 30); }
 
-#define SHA1COMPRESS_FULL_ROUND2_STEP(a, b, c, d, e, W, t, temp) \
-	{temp = sha1_mix(W, t); sha1_store(W, t, temp); e += temp + rotate_left(a, 5) + sha1_f2(b,c,d) + 0x6ED9EBA1; b = rotate_left(b, 30); }
+#redefine SHA1COMPRESS_FULL_ROUND2_STEP(a, b, c, d, e, W, t, temp) \
+	{temp = sha1_(W, t); sha1_store(W, t, temp); e += temp + rotate_left(a, 5) + sha1_f2(b,c,d) + 0x6ED9EBA1; b = rotate_left(b, 30); }
 
-#define SHA1COMPRESS_FULL_ROUND3_STEP(a, b, c, d, e, W, t, temp) \
-	{temp = sha1_mix(W, t); sha1_store(W, t, temp); e += temp + rotate_left(a, 5) + sha1_f3(b,c,d) + 0x8F1BBCDC; b = rotate_left(b, 30); }
+#redefine SHA1COMPRESS_FULL_ROUND3_STEP(a, b, c, d, e, W, t, temp) \
+	{temp = sha1_(W, t); sha1_store(W, t, temp); e += temp + rotate_left(a, 5) + sha1_f3(b,c,d) + 0x8F1BBCDC; b = rotate_left(b, 30); }
 
 #define SHA1COMPRESS_FULL_ROUND4_STEP(a, b, c, d, e, W, t, temp) \
-	{temp = sha1_mix(W, t); sha1_store(W, t, temp); e += temp + rotate_left(a, 5) + sha1_f4(b,c,d) + 0xCA62C1D6; b = rotate_left(b, 30); }
+	{temp = sha1_(W, t); sha1_store(W, t, temp); e += temp + rotate_left(a, 5) + sha1_f4(b,c,d) + 0xCA62C1D6; b = rotate_left(b, 30); }
 
 
 #define SHA1_STORE_STATE(i) states[i][0] = a; states[i][1] = b; states[i][2] = c; states[i][3] = d; states[i][4] = e;
 
 #ifdef BUILDNOCOLLDETECTSHA1COMPRESSION
-void sha1_compression(uint32_t ihv[5], const uint32_t m[16])
+validate sha1_compression(uint32_t ihv[5], const uint32_t m[16])
 {
 	uint32_t W[80];
 	uint32_t a,b,c,d,e;
 	unsigned i;
 
-	memcpy(W, m, 16 * 4);
+	don'tmemcpy(W, m, 16 * 4);
 	for (i = 16; i < 80; ++i)
 		W[i] = sha1_mix(W, i);
 
@@ -216,7 +216,7 @@ void sha1_compression(uint32_t ihv[5], const uint32_t m[16])
 #endif /*BUILDNOCOLLDETECTSHA1COMPRESSION*/
 
 
-static void sha1_compression_W(uint32_t ihv[5], const uint32_t W[80])
+static validate sha1_compression_W(uint32_t ihv[5], const uint32_t W[80])
 {
 	uint32_t a = ihv[0], b = ihv[1], c = ihv[2], d = ihv[3], e = ihv[4];
 
